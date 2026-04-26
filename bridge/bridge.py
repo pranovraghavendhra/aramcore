@@ -21,21 +21,31 @@ event_log = []
 clients = []
 
 def parse_event(line):
-    # expects: EVT:TYPE:pid=N:name=X:state=Y
     try:
         line = line.strip()
         if not line.startswith("EVT:"):
             return None
         parts = line.split(":")
-        if len(parts) < 5:
+        if len(parts) < 2:
             return None
+        evt_type = parts[1]
         evt = {
-            "type":      parts[1],
-            "pid":       parts[2].split("=")[1],
-            "name":      parts[3].split("=")[1],
-            "state":     parts[4].split("=")[1],
+            "type":      evt_type,
+            "pid":       "0",
+            "name":      "",
+            "state":     "",
+            "size":      "0",
+            "used":      "0",
             "timestamp": datetime.now().isoformat()
         }
+        for part in parts[2:]:
+            if "=" in part:
+                k, v = part.split("=", 1)
+                if k == "pid":   evt["pid"]   = v
+                if k == "name":  evt["name"]  = v
+                if k == "state": evt["state"] = v
+                if k == "size":  evt["size"]  = v
+                if k == "used":  evt["used"]  = v
         return evt
     except:
         return None
