@@ -1,0 +1,7 @@
+dashboard/node_modules
+dashboard/build
+kernel/*.bin
+kernel/*.o
+__pycache__
+bridge/__pycache__
+*.pyc
