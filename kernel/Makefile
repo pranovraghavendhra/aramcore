@@ -14,11 +14,17 @@ kernel.o: kernel.c
 vga.o: vga.c
 	$(CC) $(CFLAGS) -c vga.c -o vga.o
 
-kernel.bin: boot.o kernel.o vga.o
-	$(LD) $(LDFLAGS) -o kernel.bin boot.o kernel.o vga.o
+process.o: process.c
+	$(CC) $(CFLAGS) -c process.c -o process.o
+
+kernel.bin: boot.o kernel.o vga.o process.o
+	$(LD) $(LDFLAGS) -o kernel.bin boot.o kernel.o vga.o process.o
 
 run:
 	qemu-system-x86_64 -kernel kernel.bin -serial stdio -display none
+
+runw:
+	qemu-system-x86_64 -kernel kernel.bin -serial stdio
 
 clean:
 	rm -f *.o *.bin
